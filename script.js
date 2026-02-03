@@ -2,6 +2,10 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn  = document.getElementById("noBtn");
 const result = document.getElementById("result");
 
+/* =========================
+   POEMS (3 LANGUAGES)
+========================= */
+
 const poemEN = [
   "My love, thou art the fire in my veins,",
   "The whispered dream that softens all my pains.",
@@ -37,8 +41,11 @@ const poemNUER = [
   "Yin mi kɛ wä̈l cien. ❤️"
 ];
 
+/* =========================
+   MOVE "NO" BUTTON
+========================= */
+
 function moveNoButton() {
-  // Move the "No" button somewhere random inside the button row area.
   const parent = noBtn.parentElement;
   const padding = 8;
 
@@ -55,6 +62,10 @@ function moveNoButton() {
   noBtn.style.left = `${x}px`;
   noBtn.style.top  = `${y}px`;
 }
+
+/* =========================
+   TYPE POEM LINE BY LINE
+========================= */
 
 function typeLines(containerId, lines, delayMs = 650) {
   const container = document.getElementById(containerId);
@@ -74,23 +85,63 @@ function typeLines(containerId, lines, delayMs = 650) {
   }, delayMs);
 }
 
-// Make "No" run away on hover AND click (mobile-friendly)
+/* =========================
+   NO BUTTON EVENTS
+========================= */
+
+// Desktop
 noBtn.addEventListener("mouseenter", moveNoButton);
-noBtn.addEventListener("click", (e) => {
+noBtn.addEventListener("mouseover", moveNoButton);
+
+// Mobile touch
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  moveNoButton();
+}, { passive: false });
+
+noBtn.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  moveNoButton();
+}, { passive: false });
+
+// Modern pointer
+noBtn.addEventListener("pointerenter", moveNoButton);
+noBtn.addEventListener("pointerdown", (e) => {
   e.preventDefault();
   moveNoButton();
 });
 
-// On YES: reveal result + start all 3 animations together
+/* =========================
+   EXTRA FUN: FINGER PROXIMITY
+========================= */
+
+document.addEventListener("touchmove", (e) => {
+  const t = e.touches[0];
+  const btnRect = noBtn.getBoundingClientRect();
+
+  const btnCenterX = btnRect.left + btnRect.width / 2;
+  const btnCenterY = btnRect.top + btnRect.height / 2;
+
+  const dx = t.clientX - btnCenterX;
+  const dy = t.clientY - btnCenterY;
+
+  const distance = Math.hypot(dx, dy);
+
+  if (distance < 80) moveNoButton();
+}, { passive: true });
+
+/* =========================
+   YES BUTTON
+========================= */
+
 yesBtn.addEventListener("click", () => {
   result.classList.remove("hidden");
 
-  // Start all three columns at once
   typeLines("poem-en", poemEN, 650);
   typeLines("poem-ar", poemAR, 650);
   typeLines("poem-nuer", poemNUER, 650);
 
-  // Optional: disable buttons after yes
   yesBtn.disabled = true;
   noBtn.disabled = true;
 });
+

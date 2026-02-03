@@ -62,6 +62,10 @@ h1{margin:0 0 6px}
   box-shadow: 0 10px 30px rgba(255,79,163,.25);
 }
 
+#noBtn {
+  touch-action: none; /* allows touch events to be handled properly */
+}
+
 .no{
   position:relative;
   background: rgba(255,255,255,.08);
