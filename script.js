@@ -1,266 +1,212 @@
-const yesBtn = document.getElementById("yesBtn");
-const noBtn  = document.getElementById("noBtn");
-const resetBtn = document.getElementById("resetBtn");
-const result = document.getElementById("result");
+document.addEventListener("DOMContentLoaded", () => {
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn  = document.getElementById("noBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const result = document.getElementById("result");
 
-const poemEN = [
-  "My love, thou art the fire in my veins,",
-  "The whispered dream that softens all my pains.",
-  "When thou art near, the stars forget to shine,",
-  "For all their light is pale compared to thine.",
-  "Thy smile commands my restless, roaming heart,",
-  "And bids all lonely thoughts from me depart.",
-  "If love be sin, then gladly I shall fall,",
-  "For in thy arms, I’ve found my heaven’s call.",
-  "Come, be my Valentine, my sweetest flame,",
-  "And let the world forever know thy name. 💖"
-];
+  // Quick sanity check
+  console.log("Loaded:", { yesBtn, noBtn, resetBtn, result });
 
-const poemAR = [
-  "يا نيا، يا ضوء قلبي ونبضي،",
-  "في عينيكِ أجد السلام بعد حزني.",
-  "حين تبتسمين، ينسى الكون صوته،",
-  "وكأن النجوم خجلت من نوركِ.",
-  "أنتِ الحلم الذي لا أريد أن أصحو منه،",
-  "وأنتِ الحقيقة التي تفوق كل خيال.",
-  "كوني حبيبتي، كوني قدري الجميل،",
-  "فأنا اخترتكِ من بين كل النساء. 💕"
-];
+  const poemEN = [
+    "My love, thou art the fire in my veins,",
+    "The whispered dream that softens all my pains.",
+    "When thou art near, the stars forget to shine,",
+    "For all their light is pale compared to thine.",
+    "Thy smile commands my restless, roaming heart,",
+    "And bids all lonely thoughts from me depart.",
+    "If love be sin, then gladly I shall fall,",
+    "For in thy arms, I’ve found my heaven’s call.",
+    "Come, be my Valentine, my sweetest flame,",
+    "And let the world forever know thy name. 💖"
+  ];
 
-const poemNUER = [
-  "Nya, ci wä̈l nhom miɛth,",
-  "Yin duɔ̈ɔ̈r kuɔth mi lɔɔr.",
-  "Kɛ ci la yïn, cäŋ kɛ wɛ̈n,",
-  "Gɔ̈k kuɔth nɔ̈ŋ bɔ̈ɔ̈l.",
-  "Yin nhial mi, yin piny mi,",
-  "Yin mi raan miɛth.",
-  "Kɔ̈c yïn Valentine mi,",
-  "Yin mi kɛ wä̈l cien. ❤️"
-];
+  const poemAR = [
+    "يا نيا، يا ضوء قلبي ونبضي،",
+    "في عينيكِ أجد السلام بعد حزني.",
+    "حين تبتسمين، ينسى الكون صوته،",
+    "وكأن النجوم خجلت من نوركِ.",
+    "أنتِ الحلم الذي لا أريد أن أصحو منه،",
+    "وأنتِ الحقيقة التي تفوق كل خيال.",
+    "كوني حبيبتي، كوني قدري الجميل،",
+    "فأنا اخترتكِ من بين كل النساء. 💕"
+  ];
 
-/* ---------------------------
-   NO button: run away (mobile + desktop)
-----------------------------*/
-function moveNoButton() {
-  const padding = 20;
+  const poemNUER = [
+    "Nya, ci wä̈l nhom miɛth,",
+    "Yin duɔ̈ɔ̈r kuɔth mi lɔɔr.",
+    "Kɛ ci la yïn, cäŋ kɛ wɛ̈n,",
+    "Gɔ̈k kuɔth nɔ̈ŋ bɔ̈ɔ̈l.",
+    "Yin nhial mi, yin piny mi,",
+    "Yin mi raan miɛth.",
+    "Kɔ̈c yïn Valentine mi,",
+    "Yin mi kɛ wä̈l cien. ❤️"
+  ];
 
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+  function typeLines(containerId, lines, delayMs = 650) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    let i = 0;
 
-  const x = Math.floor(Math.random() * Math.max(maxX, 1));
-  const y = Math.floor(Math.random() * Math.max(maxY, 1));
-
-  noBtn.style.position = "fixed";
-  noBtn.style.left = `${x}px`;
-  noBtn.style.top = `${y}px`;
-}
-
-// Desktop
-noBtn.addEventListener("mouseenter", moveNoButton);
-noBtn.addEventListener("mouseover", moveNoButton);
-
-// Mobile touch
-noBtn.addEventListener("touchstart", (e) => {
-  e.preventDefault();
-  moveNoButton();
-}, { passive: false });
-
-noBtn.addEventListener("touchmove", (e) => {
-  e.preventDefault();
-  moveNoButton();
-}, { passive: false });
-
-// Pointer events (nice modern support)
-noBtn.addEventListener("pointerenter", moveNoButton);
-noBtn.addEventListener("pointerdown", (e) => {
-  e.preventDefault();
-  moveNoButton();
-});
-
-/* ---------------------------
-   Poem typing animation
-----------------------------*/
-function typeLines(containerId, lines, delayMs = 650) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-  let i = 0;
-
-  const timer = setInterval(() => {
-    if (i >= lines.length) {
-      clearInterval(timer);
-      return;
-    }
-    const div = document.createElement("div");
-    div.className = "line";
-    div.textContent = lines[i];
-    container.appendChild(div);
-    i++;
-  }, delayMs);
-
-  return timer;
-}
-
-let timers = [];
-
-/* ---------------------------
-   Heart confetti 🎉💖 (canvas)
-----------------------------*/
-const canvas = document.getElementById("confettiCanvas");
-const ctx = canvas.getContext("2d");
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth * devicePixelRatio;
-  canvas.height = window.innerHeight * devicePixelRatio;
-  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
-let confettiPieces = [];
-let confettiRunning = false;
-let confettiRAF = null;
-
-function random(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function makeHeartPath(x, y, size) {
-  ctx.beginPath();
-  const topCurveHeight = size * 0.3;
-  ctx.moveTo(x, y + topCurveHeight);
-  ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + topCurveHeight);
-  ctx.bezierCurveTo(x - size / 2, y + (size + topCurveHeight) / 2, x, y + (size + topCurveHeight) / 2, x, y + size);
-  ctx.bezierCurveTo(x, y + (size + topCurveHeight) / 2, x + size / 2, y + (size + topCurveHeight) / 2, x + size / 2, y + topCurveHeight);
-  ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
-  ctx.closePath();
-}
-
-function startConfettiHearts(durationMs = 2200) {
-  confettiPieces = [];
-  confettiRunning = true;
-
-  const colors = ["#ff4fa3", "#ffd1e8", "#d4af37", "#ff79c2", "#ffffff"];
-
-  // Create pieces
-  for (let i = 0; i < 120; i++) {
-    confettiPieces.push({
-      x: random(0, window.innerWidth),
-      y: random(-window.innerHeight, 0),
-      size: random(8, 18),
-      vy: random(1.5, 4),
-      vx: random(-1.2, 1.2),
-      rot: random(0, Math.PI * 2),
-      vr: random(-0.08, 0.08),
-      color: colors[Math.floor(Math.random() * colors.length)],
-      alpha: 1
-    });
+    const timer = setInterval(() => {
+      if (i >= lines.length) {
+        clearInterval(timer);
+        return;
+      }
+      const div = document.createElement("div");
+      div.className = "line";
+      div.textContent = lines[i];
+      container.appendChild(div);
+      i++;
+    }, delayMs);
   }
 
-  const start = performance.now();
+  // --- NO button runaway (desktop + mobile) ---
+  function moveNoButton() {
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-  function draw(now) {
+    const x = Math.floor(Math.random() * Math.max(maxX, 1));
+    const y = Math.floor(Math.random() * Math.max(maxY, 1));
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+  }
+
+  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("mouseover", moveNoButton);
+
+  // Touch (mobile)
+  noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveNoButton();
+  }, { passive: false });
+
+  noBtn.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    moveNoButton();
+  }, { passive: false });
+
+  // --- Confetti Hearts (canvas) ---
+  const canvas = document.getElementById("confettiCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  let confetti = [];
+  let confettiRunning = false;
+  let confettiTimer = null;
+
+  function spawnHearts(count = 70) {
+    confetti = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.3,
+      size: 16 + Math.random() * 18,
+      speedY: 2 + Math.random() * 4,
+      speedX: -1.5 + Math.random() * 3,
+      rot: Math.random() * Math.PI,
+      rotSpeed: (-0.05 + Math.random() * 0.1)
+    }));
+  }
+
+  function drawHeart(x, y, size, rot) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.scale(size / 32, size / 32);
+
+    ctx.beginPath();
+    ctx.moveTo(0, 10);
+    ctx.bezierCurveTo(0, -5, -20, -5, -20, 10);
+    ctx.bezierCurveTo(-20, 25, 0, 32, 0, 42);
+    ctx.bezierCurveTo(0, 32, 20, 25, 20, 10);
+    ctx.bezierCurveTo(20, -5, 0, -5, 0, 10);
+    ctx.closePath();
+
+    // pink heart fill (no need CSS colors here)
+    ctx.fillStyle = "rgba(255, 79, 163, 0.95)";
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function animateConfetti() {
     if (!confettiRunning) return;
 
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const elapsed = now - start;
-    const fadeStart = durationMs * 0.65;
+    for (const p of confetti) {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.rot += p.rotSpeed;
 
-    for (const p of confettiPieces) {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.rot += p.vr;
+      drawHeart(p.x, p.y, p.size, p.rot);
 
       // wrap
-      if (p.y > window.innerHeight + 40) p.y = -40;
-      if (p.x < -40) p.x = window.innerWidth + 40;
-      if (p.x > window.innerWidth + 40) p.x = -40;
-
-      // fade near end
-      if (elapsed > fadeStart) {
-        const t = (elapsed - fadeStart) / (durationMs - fadeStart);
-        p.alpha = Math.max(0, 1 - t);
+      if (p.y > canvas.height + 50) {
+        p.y = -30;
+        p.x = Math.random() * canvas.width;
       }
-
-      ctx.save();
-      ctx.globalAlpha = p.alpha;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.fillStyle = p.color;
-
-      makeHeartPath(0, 0, p.size);
-      ctx.fill();
-
-      ctx.restore();
     }
 
-    if (elapsed < durationMs) {
-      confettiRAF = requestAnimationFrame(draw);
-    } else {
-      stopConfetti();
-    }
+    requestAnimationFrame(animateConfetti);
   }
 
-  confettiRAF = requestAnimationFrame(draw);
-}
+  function startConfetti() {
+    confettiRunning = true;
+    spawnHearts(90);
+    animateConfetti();
 
-function stopConfetti() {
-  confettiRunning = false;
-  if (confettiRAF) cancelAnimationFrame(confettiRAF);
-  confettiRAF = null;
-  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-}
+    // auto stop after 5s (optional)
+    if (confettiTimer) clearTimeout(confettiTimer);
+    confettiTimer = setTimeout(() => {
+      stopConfetti();
+    }, 5000);
+  }
 
-/* ---------------------------
-   YES button behavior
-----------------------------*/
-yesBtn.addEventListener("click", () => {
-  result.classList.remove("hidden");
+  function stopConfetti() {
+    confettiRunning = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 
-  // Start poems together
-  timers.push(typeLines("poem-en", poemEN, 650));
-  timers.push(typeLines("poem-ar", poemAR, 650));
-  timers.push(typeLines("poem-nuer", poemNUER, 650));
+  // --- YES / RESET ---
+  yesBtn.addEventListener("click", () => {
+    result.classList.remove("hidden");
+    resetBtn.classList.remove("hidden");
 
-  // Confetti hearts
-  startConfettiHearts(2400);
+    typeLines("poem-en", poemEN, 650);
+    typeLines("poem-ar", poemAR, 650);
+    typeLines("poem-nuer", poemNUER, 650);
 
-  // Disable yes/no & show reset
-  yesBtn.disabled = true;
-  noBtn.disabled = true;
-  resetBtn.classList.remove("hidden");
-});
+    startConfetti();
 
-/* ---------------------------
-   RESET button behavior
-----------------------------*/
-resetBtn.addEventListener("click", () => {
-  // stop any running poem timers
-  timers.forEach(t => clearInterval(t));
-  timers = [];
-
-  // hide result again
-  result.classList.add("hidden");
-
-  // clear poem containers (so it doesn't keep old lines)
-  const ids = ["poem-en", "poem-ar", "poem-nuer"];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = "";
+    yesBtn.disabled = true;
+    // noBtn disabled optional, but funny to keep it running:
+    // noBtn.disabled = true;
   });
 
-  // stop confetti
-  stopConfetti();
+  resetBtn.addEventListener("click", () => {
+    result.classList.add("hidden");
+    resetBtn.classList.add("hidden");
 
-  // re-enable buttons
-  yesBtn.disabled = false;
-  noBtn.disabled = false;
+    document.getElementById("poem-en").innerHTML = "";
+    document.getElementById("poem-ar").innerHTML = "";
+    document.getElementById("poem-nuer").innerHTML = "";
 
-  // put NO button back to normal spot
-  noBtn.style.position = "relative";
-  noBtn.style.left = "";
-  noBtn.style.top = "";
+    yesBtn.disabled = false;
+    noBtn.disabled = false;
 
-  // hide reset button
-  resetBtn.classList.add("hidden");
+    // put No back in normal spot
+    noBtn.style.position = "relative";
+    noBtn.style.left = "";
+    noBtn.style.top = "";
+
+    stopConfetti();
+  });
 });
