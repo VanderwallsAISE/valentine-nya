@@ -1,3 +1,19 @@
+
+# 💖 Valentine for Nya
+
+A small interactive Valentine project built with:
+- HTML
+- CSS
+- JavaScript
+- Love & courage
+
+Made by Castel.
+
+
+
+
+
+
 💘 For Nya
 🌹 English (Shakespeare-inspired)
 

@@ -2,34 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Valentine for Nya 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nya, Be My Valentine? 💘</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Hey Nya 💕</h1>
-    <p class="question">Will you be my Valentine?</p>
+  <main class="card">
+    <h1>Hey Nya 💖</h1>
+    <p class="sub">I have a serious question… with unserious buttons 😌</p>
 
-    <div class="buttons">
-      <button id="yesBtn">Yes 💖</button>
-      <button id="noBtn">No 🙃</button>
+    <div class="question">
+      <h2>Will you be my Valentine?</h2>
+
+      <div class="btn-row">
+        <button id="yesBtn" class="btn yes">Yes 💗</button>
+        <button id="noBtn" class="btn no">No 🙃</button>
+      </div>
     </div>
 
-    <div id="poem" class="hidden">
-      <h2>🌹 For You 🌹</h2>
-      <p>
-        My love, my light, my quiet flame,<br />
-        No stars above could shine the same.<br /><br />
+    <section id="result" class="result hidden">
+      <h2 class="yay">Yesss 😭💘</h2>
+      <p class="sub">Now… read this slowly. (It appears line by line.)</p>
 
-        In every laugh, in every glance,<br />
-        My heart found home, my soul its dance.<br /><br />
+      <div class="poem-grid">
+        <div class="poem-col">
+          <h3>English</h3>
+          <div id="poem-en" class="poem-lines"></div>
+        </div>
 
-        If time stood still, I’d choose you still,<br />
-        In every life, by fate or will. 💫
-      </p>
-    </div>
-  </div>
+        <div class="poem-col poem-ar">
+          <h3>العربية</h3>
+          <div id="poem-ar" class="poem-lines" dir="rtl"></div>
+        </div>
+
+        <div class="poem-col">
+          <h3>Nuer</h3>
+          <div id="poem-nuer" class="poem-lines"></div>
+        </div>
+      </div>
+
+      <p class="footer">— from Castel 🖤</p>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+

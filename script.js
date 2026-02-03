@@ -1,15 +1,96 @@
 const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const poem = document.getElementById("poem");
+const noBtn  = document.getElementById("noBtn");
+const result = document.getElementById("result");
 
-yesBtn.addEventListener("click", () => {
-  poem.classList.remove("hidden");
-  yesBtn.style.display = "none";
-  noBtn.style.display = "none";
+const poemEN = [
+  "My love, thou art the fire in my veins,",
+  "The whispered dream that softens all my pains.",
+  "When thou art near, the stars forget to shine,",
+  "For all their light is pale compared to thine.",
+  "Thy smile commands my restless, roaming heart,",
+  "And bids all lonely thoughts from me depart.",
+  "If love be sin, then gladly I shall fall,",
+  "For in thy arms, I’ve found my heaven’s call.",
+  "Come, be my Valentine, my sweetest flame,",
+  "And let the world forever know thy name. 💖"
+];
+
+const poemAR = [
+  "يا نيا، يا ضوء قلبي ونبضي،",
+  "في عينيكِ أجد السلام بعد حزني.",
+  "حين تبتسمين، ينسى الكون صوته،",
+  "وكأن النجوم خجلت من نوركِ.",
+  "أنتِ الحلم الذي لا أريد أن أصحو منه،",
+  "وأنتِ الحقيقة التي تفوق كل خيال.",
+  "كوني حبيبتي، كوني قدري الجميل،",
+  "فأنا اخترتكِ من بين كل النساء. 💕"
+];
+
+const poemNUER = [
+  "Nya, ci wä̈l nhom miɛth,",
+  "Yin duɔ̈ɔ̈r kuɔth mi lɔɔr.",
+  "Kɛ ci la yïn, cäŋ kɛ wɛ̈n,",
+  "Gɔ̈k kuɔth nɔ̈ŋ bɔ̈ɔ̈l.",
+  "Yin nhial mi, yin piny mi,",
+  "Yin mi raan miɛth.",
+  "Kɔ̈c yïn Valentine mi,",
+  "Yin mi kɛ wä̈l cien. ❤️"
+];
+
+function moveNoButton() {
+  // Move the "No" button somewhere random inside the button row area.
+  const parent = noBtn.parentElement;
+  const padding = 8;
+
+  const parentRect = parent.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+
+  const maxX = parentRect.width - btnRect.width - padding;
+  const maxY = parentRect.height - btnRect.height - padding;
+
+  const x = Math.max(padding, Math.random() * maxX);
+  const y = Math.max(padding, Math.random() * maxY);
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top  = `${y}px`;
+}
+
+function typeLines(containerId, lines, delayMs = 650) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  let i = 0;
+
+  const timer = setInterval(() => {
+    if (i >= lines.length) {
+      clearInterval(timer);
+      return;
+    }
+    const div = document.createElement("div");
+    div.className = "line";
+    div.textContent = lines[i];
+    container.appendChild(div);
+    i++;
+  }, delayMs);
+}
+
+// Make "No" run away on hover AND click (mobile-friendly)
+noBtn.addEventListener("mouseenter", moveNoButton);
+noBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  moveNoButton();
 });
 
-noBtn.addEventListener("mouseover", () => {
-  noBtn.style.position = "absolute";
-  noBtn.style.left = Math.random() * 80 + "%";
-  noBtn.style.top = Math.random() * 80 + "%";
+// On YES: reveal result + start all 3 animations together
+yesBtn.addEventListener("click", () => {
+  result.classList.remove("hidden");
+
+  // Start all three columns at once
+  typeLines("poem-en", poemEN, 650);
+  typeLines("poem-ar", poemAR, 650);
+  typeLines("poem-nuer", poemNUER, 650);
+
+  // Optional: disable buttons after yes
+  yesBtn.disabled = true;
+  noBtn.disabled = true;
 });
