@@ -9,6 +9,7 @@
 }
 
 *{box-sizing:border-box}
+
 body{
   margin:0;
   min-height:100vh;
@@ -29,6 +30,8 @@ body{
   border-radius:22px;
   padding:22px;
   box-shadow: 0 18px 60px rgba(0,0,0,.55);
+  position: relative;
+  z-index: 2;
 }
 
 h1{margin:0 0 6px}
@@ -50,7 +53,7 @@ h1{margin:0 0 6px}
   border-radius:14px;
   font-weight:700;
   cursor:pointer;
-  transition: transform .12s ease;
+  transition: transform .12s ease, opacity .2s ease;
   user-select:none;
 }
 
@@ -62,15 +65,22 @@ h1{margin:0 0 6px}
   box-shadow: 0 10px 30px rgba(255,79,163,.25);
 }
 
-#noBtn {
-  touch-action: none; /* allows touch events to be handled properly */
-}
-
 .no{
   position:relative;
   background: rgba(255,255,255,.08);
   color:var(--text);
   border:1px solid rgba(255,255,255,.14);
+}
+
+.reset{
+  background: rgba(212,175,55,.14);
+  color: var(--text);
+  border: 1px solid rgba(212,175,55,.30);
+}
+
+/* Helps mobile touch handling */
+#noBtn{
+  touch-action: none;
 }
 
 .result{margin-top:18px}
@@ -133,22 +143,17 @@ h1{margin:0 0 6px}
   color: var(--muted);
   font-style: italic;
 }
-@media (max-width: 900px){
-  .poem-grid{grid-template-columns: 1fr}
-}
-/* Confetti canvas sits on top of everything */
+
+/* Confetti canvas full screen */
 #confettiCanvas{
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 1;
 }
 
-/* Reset button */
-.reset{
-  background: rgba(255,255,255,.10);
-  color: var(--text);
-  border: 1px solid rgba(255,255,255,.18);
+@media (max-width: 900px){
+  .poem-grid{grid-template-columns: 1fr}
 }

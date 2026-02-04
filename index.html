@@ -8,8 +8,13 @@
 </head>
 <body>
   <main class="card">
-    <h1>Hey Nya 💖</h1>
-    <p class="sub">I have a serious question… with unserious buttons for you HABIBI 😌</p>
+    <!-- Title that DISAPPEARS after YES -->
+    <h1 id="titleHey">Hey Nya 💖</h1>
+
+    <!-- Title that APPEARS after YES -->
+    <h1 id="titleLove" class="hidden">I love you — بحبك 🤍</h1>
+
+    <p class="sub" id="subtitleTop">I have a serious question… with unserious buttons for you HABIBI 😌</p>
 
     <div class="question">
       <h2>Will you be my Valentine?</h2>
@@ -46,9 +51,14 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <!-- Confetti canvas should be OUTSIDE the card so it can cover whole screen -->
   <canvas id="confettiCanvas"></canvas>
+
+  <!-- Tiny beep sound (no external file). Browsers allow this after a click. -->
+  <audio id="yesSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav">
+  </audio>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
-
